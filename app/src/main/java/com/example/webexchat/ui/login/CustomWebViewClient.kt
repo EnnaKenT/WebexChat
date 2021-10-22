@@ -1,4 +1,4 @@
-package com.example.webexchat
+package com.example.webexchat.ui.login
 
 import android.annotation.TargetApi
 import android.graphics.Bitmap
@@ -9,8 +9,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-open class CustomWebView() : WebViewClient() {
-    private var listener: ((code: String) -> Unit)? = null
+class CustomWebViewClient(private val listener: (code: String) -> Unit) : WebViewClient() {
 
     @TargetApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -37,16 +36,11 @@ open class CustomWebView() : WebViewClient() {
 
             if (url.startsWith("https://webexdemoapp.com/?code=")) {
                 val code = uri.getQueryParameter("code")
-                code?.let { listener?.invoke(it) }
-
+                code?.let { listener.invoke(it) }
             } else {
                 val error = uri.getQueryParameter("error")
             }
         }
-    }
-
-    fun setOnLoadCode(function: (code: String) -> Unit) {
-        listener = function
     }
 
     companion object {
