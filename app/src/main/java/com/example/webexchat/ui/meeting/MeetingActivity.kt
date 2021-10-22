@@ -34,9 +34,11 @@ class MeetingActivity : AppCompatActivity(R.layout.activity_meeting) {
         try {
             val meetingResponse: MeetingResponse = Application.getNetwork.getMeetings()
             if (meetingResponse.items.isNotEmpty()) {
-                adapter.submitList(meetingResponse.items)
-                recyclerView.isVisible = true
-                placeholder.isGone = true
+                withContext(Dispatchers.Main) {
+                    adapter.submitList(meetingResponse.items)
+                    recyclerView.isVisible = true
+                    placeholder.isGone = true
+                }
             } else {
                 withContext(Dispatchers.Main) {
                     placeholder.text = "No meetings found"
